@@ -1,0 +1,20 @@
+Building micro-redis (release)...
+Machine: 8 cores. Benchmark client: 200 connections, 4 threads.
+Each round, per server: 500000 SETs one at a time, 1000000 pipelined 16 deep, 100000 over a single connection.
+
+threads    server | many clients         | pipelined 16         | srv cores | 1 client            
+1          lock   |    84k (81-88k)      |   455k (449-455k)    | 0.82      |    33k (33-33k)     
+1          actor  |    84k (78-88k)      |   455k (409-456k)    | 0.83      |    30k (30-30k)     
+1 (always) redis  |    88k (84-92k)      |   690k (680-691k)    | 0.73      |    33k (33-33k)     
+2          lock   |    84k (80-87k)      |   512k (455-513k)    | 1.49      |    33k (33-33k)     
+2          actor  |    84k (80-84k)      |   454k (409-455k)    | 1.60      |    30k (30-33k)     
+1 (always) redis  |    88k (84-92k)      |   688k (589-691k)    | 0.73      |    33k (33-33k)     
+4          lock   |    84k (84-87k)      |   452k (408-455k)    | 1.89      |    33k (33-33k)     
+4          actor  |    84k (84-87k)      |   455k (451-456k)    | 2.52      |    30k (30-30k)     
+1 (always) redis  |    88k (84-91k)      |   687k (590-691k)    | 0.73      |    33k (33-33k)     
+8          lock   |    87k (80-87k)      |   453k (409-455k)    | 1.93      |    33k (33-33k)     
+8          actor  |    87k (84-88k)      |   454k (451-457k)    | 2.84      |    30k (30-33k)     
+1 (always) redis  |    91k (87-96k)      |   686k (683-689k)    | 0.71      |    33k (33-33k)     
+16         lock   |    84k (80-84k)      |   408k (401-454k)    | 1.90      |    33k (30-33k)     
+16         actor  |    84k (80-87k)      |   454k (409-455k)    | 2.83      |    30k (30-30k)     
+1 (always) redis  |    87k (80-91k)      |   688k (589-691k)    | 0.72      |    33k (30-33k)     

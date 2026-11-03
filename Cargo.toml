@@ -1,0 +1,34 @@
+[package]
+name = "micro-redis"
+version = "1.0.0"
+edition = "2024"
+description = "A linearizable, multithreaded Redis-compatible server (RESP2) in Rust/tokio"
+license = "MIT"
+rust-version = "1.88"
+default-run = "micro-redis"
+
+[dependencies]
+bytes = "1.12.1"
+mlua = { version = "0.12.2", features = ["lua51", "vendored"] }
+sha1_smol = "1.0.1"
+thiserror = "2.0.21"
+tokio = { version = "1.54.0", features = ["full"] }
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", features = ["env-filter"] }
+
+[features]
+# Planted bugs. Each one must make the test suite fail; see README "How it was verified".
+bug-reply-before-apply = []
+bug-split-register = []
+bug-split-serve = []
+
+[profile.release]
+# A panic inside a critical section would leave a database half-updated.
+# The spec says: "If the service crashes, it stops and gives up." So abort.
+panic = "abort"
+
+[profile.dev]
+panic = "abort"
+
+[dev-dependencies]
+socket2 = "0.6"
